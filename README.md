@@ -23,4 +23,5 @@ Application description is under `src-tauri/tauri.conf.json`.
 
 Application logos are under `src-tauri/icons/`.
 
-
+## MIT License
+Karar Al-Remahy
