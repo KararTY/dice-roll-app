@@ -1,7 +1,6 @@
 <script type="ts">
   import { url } from "@roxi/routify";
   import { app, fs, path } from "@tauri-apps/api";
-  import { readTextFile } from "@tauri-apps/api/fs";
   import { onMount } from "svelte";
 
   import { Settings } from "../Helpers";
@@ -11,7 +10,7 @@
   async function createConfigDirectory() {
     const configDir = await path.configDir();
     const appName = await app.getName();
-    const configPathStr = await path.join(configDir, appName);
+    const configPathStr = configDir + path.sep + appName;
 
     try {
       await fs.createDir(configPathStr);
