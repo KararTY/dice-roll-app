@@ -1,0 +1,47 @@
+{
+  "name": "dice-roll-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:tailwind && routify -b && rollup -c",
+    "dev": "concurrently routify \"npm run watch:tailwind\" \"rollup -c -w\"",
+    "start": "sirv public --single --no-clear",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "tauri": "tauri",
+    "watch:tailwind": "cross-env TAILWIND_MODE=watch cross-env NODE_ENV=development postcss src/css/styles.css -o public/index.css -w",
+    "build:tailwind": "cross-env TAILWIND_MODE=build cross-env NODE_ENV=production postcss src/css/styles.css -o public/index.css"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.0",
+    "@rollup/plugin-typescript": "^8.0.0",
+    "@roxi/routify": "^2.18.3",
+    "@tauri-apps/cli": "^1.0.0-beta.10",
+    "@tsconfig/svelte": "^2.0.0",
+    "@types/chance": "^1.1.3",
+    "autoprefixer": "^9",
+    "concurrently": "^6.3.0",
+    "cross-env": "^7.0.3",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.3.9",
+    "postcss-cli": "^7",
+    "rollup": "^2.3.4",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-svelte": "^7.0.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "svelte": "^3.0.0",
+    "svelte-check": "^2.0.0",
+    "svelte-preprocess": "^4.0.0",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "tslib": "^2.0.0",
+    "typescript": "^4.0.0"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.0.0-beta.8",
+    "chance": "^1.1.8",
+    "chart.js": "^3.5.1",
+    "chartjs-plugin-datalabels": "^2.0.0",
+    "sirv-cli": "^1.0.0"
+  }
+}

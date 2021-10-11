@@ -1,0 +1,82 @@
+{
+  "package": {
+    "productName": "Heinonen's Dice",
+    "version": "1.0.0"
+  },
+  "build": {
+    "distDir": "../public",
+    "devPath": "http://localhost:5000",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "tauri": {
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.alremahy.heinonen-s-dice",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "resources": [],
+      "externalBin": [],
+      "copyright": "",
+      "category": "DiceGame",
+      "shortDescription": "A dice simulation application.",
+      "longDescription": "Heinonen's Dice is a dice simulation application that allows user customization.",
+      "deb": {
+        "depends": [],
+        "useBootstrapper": false
+      },
+      "macOS": {
+        "frameworks": [],
+        "minimumSystemVersion": "",
+        "useBootstrapper": false,
+        "exceptionDomain": "",
+        "signingIdentity": null,
+        "entitlements": null
+      },
+      "windows": {
+        "wix": {
+          "license": "../LICENSE"
+        },
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "updater": {
+      "active": false
+    },
+    "allowlist": {
+      "all": false,
+      "path": {
+        "all": true
+      },
+      "fs": {
+        "createDir": true,
+        "writeFile": true,
+        "readTextFile": true,
+        "removeFile": true
+      },
+      "shell": {
+        "open": true
+      }
+    },
+    "windows": [
+      {
+        "title": "Heinonen's Dice",
+        "width": 800,
+        "height": 600,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'"
+    }
+  }
+}
