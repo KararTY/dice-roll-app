@@ -33,6 +33,7 @@
       },
       "macOS": {
         "frameworks": [],
+        "license": "../LICENSE",
         "minimumSystemVersion": "",
         "useBootstrapper": false,
         "exceptionDomain": "",
