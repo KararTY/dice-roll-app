@@ -27,8 +27,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y webkit2gtk-4.0
-    - name: install app dependencies and build it
-      run: yarn && yarn build
+    - name: install app dependencies
+      run: yarn
     - uses: tauri-apps/tauri-action@v0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -36,5 +36,5 @@ jobs:
         tagName: heinonen-s-dice-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
         releaseName: "Heinonen's Dice v__VERSION__"
         releaseBody: "See the assets to download this version and install."
-        releaseDraft: false
+        releaseDraft: true
         prerelease: false

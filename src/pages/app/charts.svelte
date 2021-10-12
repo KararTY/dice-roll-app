@@ -1,5 +1,6 @@
 <script type="ts">
   import { onDestroy, onMount } from "svelte";
+  import type { Unsubscriber } from "svelte/store";
   import Chart from "chart.js/auto";
   import ChartDataLabels from "chartjs-plugin-datalabels";
 
@@ -35,7 +36,7 @@
         clamp: true,
         anchor: "center" as "center",
         align: "end" as "end",
-        formatter: function (value: number, context: any) {
+        formatter: function (value: number) {
           return $isInPercentage
             ? (value < 0.1 ? value.toFixed(5) : value.toFixed(2)) + "%"
             : value;
@@ -44,8 +45,8 @@
     };
   };
 
-  let unsubscribe;
-  let initialChartData;
+  let unsubscribe: Unsubscriber;
+  let initialChartData: { width: number; height: number; };
 
   globalThis.chart = {};
 
