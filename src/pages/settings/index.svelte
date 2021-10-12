@@ -1,7 +1,7 @@
 <script type="ts">
   import { url } from "@roxi/routify";
   import { onMount } from "svelte";
-  import { shell, path, fs, app } from "@tauri-apps/api";
+  import { shell, path, fs } from "@tauri-apps/api";
 
   import Instances from "./instances.svelte";
   import Charts from "./charts.svelte";
@@ -26,7 +26,14 @@
         if (["text", "select-one"].includes(input.type)) {
           instanceSettings[input.name] = input.value;
         } else if (input.type === "number") {
-          instanceSettings[input.name] = Number(input.value);
+          if (input.name === "drop") {
+            const rollsTimes = Number(form.elements["rollsTimes"].value);
+            const drop = Number(input.value);
+            instanceSettings[input.name] =
+              drop >= rollsTimes ? rollsTimes - 1 : drop;
+          } else {
+            instanceSettings[input.name] = Number(input.value);
+          }
         }
       }
 
@@ -54,6 +61,8 @@
       instances,
       charts,
     });
+
+    $temporarySettings.instances = $settings.instances;
 
     await saveSettingsToFile();
 

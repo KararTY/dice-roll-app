@@ -22,6 +22,15 @@ export interface Instance extends Base {
   res: Res[] // x1000
 }
 
+export interface ErrorInstanceType {
+  timestamps: {
+    start: Date
+    end: Date
+  }
+  title: string,
+  description: string
+}
+
 export interface InstanceSettingsType extends Base {
   times?: number
   amountOfDice?: number

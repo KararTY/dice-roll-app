@@ -1,13 +1,13 @@
-import Ch from 'chance'
+import Ch from "chance"
 
-import type { Instance } from './global'
+import type { Instance } from "./global"
 
-import { Writable, writable } from 'svelte/store'
-import { Settings } from './Helpers'
+import { Writable, writable } from "svelte/store"
+import { ErrorInstance, Settings } from "./Helpers"
 
-export const historyArray: Writable<Array<Instance[]>> = writable([])
+export const historyArray: Writable<Array<(Instance | ErrorInstance)[]>> = writable([])
 
-export const currentInstances: Writable<Instance[] | undefined> = writable([])
+export const currentInstances: Writable<(Instance | ErrorInstance)[] | undefined> = writable([])
 
 export const settings: Writable<Settings> = writable(new Settings())
 export const isInPercentage: Writable<boolean> = writable(false)

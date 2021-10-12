@@ -3,17 +3,20 @@
   import { DiceSides, InstanceSettings } from "../../Helpers";
   import { temporarySettings } from "../../store";
 
-  function removeInstance (ev: MouseEvent) {
-    const el = ev.currentTarget as HTMLButtonElement
+  function removeInstance(ev: MouseEvent) {
+    const el = ev.currentTarget as HTMLButtonElement;
 
-    const index = Number(el.dataset["instanceIndex"])
+    const index = Number(el.dataset["instanceIndex"]);
 
-    $temporarySettings.instances.splice(index, 1)
-    $temporarySettings = $temporarySettings
+    $temporarySettings.instances.splice(index, 1);
+    $temporarySettings = $temporarySettings;
   }
 
-  function addNewInstance () {
-    $temporarySettings.instances = [...$temporarySettings.instances, new InstanceSettings()]
+  function addNewInstance() {
+    $temporarySettings.instances = [
+      ...$temporarySettings.instances,
+      new InstanceSettings(),
+    ];
   }
 
   function getInstanceSettingsString(instance: InstanceSettingsType) {
@@ -41,14 +44,25 @@
     <hr class="border-2 rounded my-4 bg-hr" />
     <nav class="flex flex-row items-center gap-2">
       <p class="text-xl flex-grow w-full">
-        {getInstanceSettingsString(instance)}
+        <strong>Instance #{index + 1}:</strong>
+        <span>{getInstanceSettingsString(instance)}</span>
       </p>
-      <button class="mono bg-button button p-1" on:click={removeInstance} data-instance-index={index.toString()}>REMOVE</button>
+      <button
+        class="mono bg-button button p-1"
+        on:click={removeInstance}
+        data-instance-index={index.toString()}>REMOVE</button
+      >
     </nav>
     <form id={"instance" + index.toString()}>
       <label for="names">Times</label>
       <small>(How many instances to simulate.)</small>
-      <input type="number" class="input" name="times" min="0" value={instance.times} />
+      <input
+        type="number"
+        class="input"
+        name="times"
+        min="1"
+        value={instance.times}
+      />
       <br />
       <label for="rollsTimes">Rolls times</label>
       <small>(How many times to throw the dice for a total.)</small>
@@ -56,7 +70,7 @@
         type="number"
         class="input"
         name="rollsTimes"
-        min="0"
+        min="1"
         value={instance.rollsTimes}
       />
       <br />
@@ -66,7 +80,7 @@
         type="number"
         class="input"
         name="amountOfDice"
-        min="0"
+        min="1"
         value={instance.amountOfDice}
       />
       <br />
@@ -83,16 +97,32 @@
       </select>
       <br />
       <label for="drop">Drop</label>
-      <small>(How many of the lowest roll total to drop.)</small>
-      <input type="number" class="input" name="drop" min="0" value={instance.drop} />
+      <small
+        >(How many of the lowest roll total to drop, it must be lower than
+        "Rolls times".)</small
+      >
+      <input
+        type="number"
+        class="input"
+        name="drop"
+        min="0"
+        value={instance.drop}
+      />
       <br />
       <label for="seed">Seed</label>
       <small>(Leave empty for random seed.)</small>
-      <input type="text" class="input" name="seed" value={instance.seed || ""} />
+      <input
+        type="text"
+        class="input"
+        name="seed"
+        value={instance.seed || ""}
+      />
     </form>
   {/each}
   <hr class="border-2 rounded my-4 bg-hr" />
   <div class="flex">
-    <button class="mono bg-button button p-4 my-2" on:click={addNewInstance}>CREATE INSTANCE</button>
+    <button class="mono bg-button button p-4 my-2" on:click={addNewInstance}
+      >CREATE INSTANCE</button
+    >
   </div>
 </div>

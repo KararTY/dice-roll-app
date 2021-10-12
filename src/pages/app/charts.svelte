@@ -8,6 +8,7 @@
   import { currentInstances, isInPercentage, settings } from "../../store";
   import {
     bgPlugin,
+    ErrorInstance,
     getAllRolls,
     getFormulaString,
     hexToRGBA,
@@ -35,7 +36,9 @@
         anchor: "center" as "center",
         align: "end" as "end",
         formatter: function (value: number, context: any) {
-          return $isInPercentage ? ((value < 0.1 ? value.toFixed(5) : value.toFixed(2)) + "%") : value;
+          return $isInPercentage
+            ? (value < 0.1 ? value.toFixed(5) : value.toFixed(2)) + "%"
+            : value;
         },
       },
     };
@@ -79,8 +82,10 @@
       for (let index = 0; index < $currentInstances.length; index++) {
         const instance = $currentInstances[index];
 
-        initializeChart(instance);
-        initializeChart2(instance);
+        if (!(instance instanceof ErrorInstance)) {
+          initializeChart(instance);
+          initializeChart2(instance);
+        }
       }
     }, 100);
   }
@@ -309,13 +314,16 @@
 
     for (let index = 0; index < $currentInstances.length; index++) {
       const instance = $currentInstances[index];
-      globalThis.chart[
-        instance.timestamps.end.getTime().toString() + "-diceSides"
-      ].destroy();
 
-      globalThis.chart[
-        instance.timestamps.end.getTime().toString() + "-totals"
-      ].destroy();
+      if (!(instance instanceof ErrorInstance)) {
+        globalThis.chart[
+          instance.timestamps.end.getTime().toString() + "-diceSides"
+        ].destroy();
+
+        globalThis.chart[
+          instance.timestamps.end.getTime().toString() + "-totals"
+        ].destroy();
+      }
     }
   });
 </script>
@@ -331,16 +339,28 @@
   {#each $currentInstances as instance, index}
     <div>
       <hr class="border-2 rounded my-4 bg-hr" />
-      <p>
-        <strong>Instance #{index + 1}:</strong>
-        {getFormulaString(instance)}
-      </p>
-      <div>
-        <canvas
-          id={instance.timestamps.end.getTime().toString() + "-diceSides"}
-        />
-        <canvas id={instance.timestamps.end.getTime().toString() + "-totals"} />
-      </div>
+      {#if instance instanceof ErrorInstance}
+        <p>
+          <strong>Instance #{index + 1}:</strong>
+          <span>Errored out. Check your settings.</span>
+        </p>
+        {#each instance.errors as { title, description }}
+          <p><strong>{title}: </strong> {description}</p>
+        {/each}
+      {:else}
+        <p>
+          <strong>Instance #{index + 1}:</strong>
+          <span>{getFormulaString(instance)}</span>
+        </p>
+        <div>
+          <canvas
+            id={instance.timestamps.end.getTime().toString() + "-diceSides"}
+          />
+          <canvas
+            id={instance.timestamps.end.getTime().toString() + "-totals"}
+          />
+        </div>
+      {/if}
     </div>
   {/each}
 </main>

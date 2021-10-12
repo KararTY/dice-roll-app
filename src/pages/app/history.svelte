@@ -1,5 +1,5 @@
 <script type="ts">
-  import { getFormulaString, getTotals } from "../../Helpers";
+  import { ErrorInstance, getFormulaString } from "../../Helpers";
   import { currentInstances, historyArray } from "../../store";
 
   function clearHistory() {
@@ -24,8 +24,13 @@
         <button
           class="button bg-button p-4"
           on:click={() => loadFromHistory(index)}
+          title={instances.map(instance => instance.timestamps.start.toUTCString()).join(" & ")}
           >{instances
-            .map((instance) => `[${getFormulaString(instance, true)}]`)
+            .map((instance) =>
+              !(instance instanceof ErrorInstance)
+                ? `[${getFormulaString(instance)}]`
+                : "[Error]"
+            )
             .join(" vs ")}</button
         >
       {/each}

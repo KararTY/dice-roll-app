@@ -11,6 +11,7 @@
     getTotals,
     returnSmallest,
     getFormulaString,
+    ErrorInstance,
   } from "../../Helpers";
   import {
     historyArray,
@@ -36,12 +37,18 @@
   }
 
   function createInstances() {
-    const instances = [];
+    const instances: (Instance | ErrorInstance)[] = [];
 
     for (let index = 0; index < $settings.instances.length; index++) {
       const instanceSettings = $settings.instances[index];
 
-      instances.push(loopDice(instanceSettings));
+      const errors = isLegalInstanceSettings(instanceSettings);
+
+      if (!(errors.length > 0)) {
+        instances.push(loopDice(instanceSettings));
+      } else {
+        instances.push(new ErrorInstance(errors));
+      }
     }
 
     $currentInstances = instances;
@@ -148,10 +155,40 @@
     return dropped;
   }
 
-  function addToHistoryArray(instance: Instance[]) {
+  function addToHistoryArray(instance: (Instance | ErrorInstance)[]) {
     $historyArray = [...$historyArray, instance].sort((a, b) => {
       return b[0].timestamps.end.getTime() - a[0].timestamps.end.getTime();
     });
+  }
+
+  function isLegalInstanceSettings(instance: InstanceSettingsType) {
+    const errors: Array<{ title: string; description: string }> = [];
+
+    if (instance.drop >= instance.rollsTimes) {
+      errors.push({
+        title: '"Drop" is more than or equal to "Rolls times"',
+        description:
+          'Your "Drop" value must be lower than "Rolls times" or else you get no rolls.',
+      });
+    }
+
+    if (instance.times < 1) {
+      errors.push({
+        title: '"Times" is not 1 or more',
+        description:
+          'Your "Times" value must be 1 or more, or else your instance will not run any simulations.',
+      });
+    }
+
+    if (instance.amountOfDice < 1) {
+      errors.push({
+        title: '"Amount of Dice" is not 1 or more',
+        description:
+          'Your "Amount of Dice" value must be 1 or more, or else you are not throwing any dice for this instance which means no results.',
+      });
+    }
+
+    return errors;
   }
 </script>
 
@@ -160,7 +197,11 @@
     {#if $currentInstances.length > 0}
       <h1 class="text-3xl">
         {$currentInstances
-          .map((instance) => `[${getFormulaString(instance)}]`)
+          .map((instance) =>
+            !(instance instanceof ErrorInstance)
+              ? `[${getFormulaString(instance)}]`
+              : "[Error]"
+          )
           .join(" vs ")}
       </h1>
     {:else}

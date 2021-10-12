@@ -45,6 +45,10 @@ export function getAverageInInstance(instance: Instance) {
 export function getFormulaString(instance: Instance, small = false) {
   const exampleRoll = instance.res[0].rolls[0]
 
+  if (!exampleRoll) {
+    return "Could not find any rolls."
+  }
+
   let strRes = `x${instance.res.length}(x`
   strRes += `${instance.rollsTimes} `
   strRes += `${exampleRoll.length}${instance.diceSides}`
@@ -92,6 +96,17 @@ export class InstanceSettings {
     this.diceSides = settings?.diceSides || DiceSides.d6
     this.drop = typeof settings?.drop === 'number' ? settings.drop : 2
     this.seed = settings?.seed
+  }
+}
+
+export class ErrorInstance {
+  public errors?: Array<{ title: string, description: string }>
+  public timestamps: { start: Date, end: Date }
+
+  constructor (errors: { title: string; description: string; }[]) {
+    this.errors = errors || []
+
+    this.timestamps = { start: new Date(), end: new Date() }
   }
 }
 
