@@ -91,12 +91,6 @@
     return;
   }
 
-  async function openSettingsDirectory() {
-    await shell.open(await path.appDir());
-
-    console.log("Opening settings directory!");
-  }
-
   onMount(() => {
     $temporarySettings = { ...$settings };
   });
@@ -122,9 +116,22 @@
       class="flex-1 bg-button p-4 rounded-md flex items-center justify-center"
       on:click={resetSettingsToDefault}>RESET TO DEFAULT</button
     >
-    <button
-      class="flex-1 bg-button p-4 rounded-md flex items-center justify-center"
-      on:click={openSettingsDirectory}>OPEN DIRECTORY</button
-    >
+    <p class="flex-1">
+      <label for="directory">Settings directory</label>
+      {#await path.appDir()}
+        <p>Waiting for directory...</p>
+      {:then dir}
+        <input
+          on:click={function () {
+            this.select();
+          }}
+          type="text"
+          class="input"
+          id="directory"
+          value={dir}
+          on:keydown={(ev) => ev.preventDefault()}
+        />
+      {/await}
+    </p>
   </footer>
 </div>

@@ -10,7 +10,7 @@
   // Create configDir
   async function createConfigDirectory() {
     try {
-      await fs.createDir(".", { dir: BaseDirectory.App });
+      await fs.createDir("", { dir: BaseDirectory.App });
     } catch (error) {
       console.error(error);
     }
