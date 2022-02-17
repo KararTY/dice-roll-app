@@ -1,31 +1,24 @@
 <script type="ts">
   import { url } from "@roxi/routify";
-  import { app, fs, path } from "@tauri-apps/api";
+  import { fs } from "@tauri-apps/api";
+  import { BaseDirectory } from "@tauri-apps/api/fs";
   import { onMount } from "svelte";
 
   import { Settings } from "../Helpers";
-  import { configPath, settings } from "../store";
+  import { settings } from "../store";
 
   // Create configDir
   async function createConfigDirectory() {
-    const configDir = await path.configDir();
-    const appName = await app.getName();
-    const configPathStr = configDir + path.sep + appName;
-
     try {
-      await fs.createDir(configPathStr);
+      await fs.createDir(".", { dir: BaseDirectory.App });
     } catch (error) {
       console.error(error);
     }
-
-    $configPath = configPathStr;
   }
 
   async function loadSettings() {
     try {
-      const settingsStr = await fs.readTextFile(
-        $configPath + path.sep + "settings.json"
-      );
+      const settingsStr = await fs.readTextFile("settings.json", { dir: BaseDirectory.App });
 
       $settings = new Settings(JSON.parse(settingsStr));
     } catch (error) {

@@ -8,7 +8,8 @@
 
   import type { ChartsSettingsType, InstanceSettingsType } from "../../global";
   import { Settings } from "../../Helpers";
-  import { configPath, settings, temporarySettings } from "../../store";
+  import { settings, temporarySettings } from "../../store";
+  import { BaseDirectory } from "@tauri-apps/api/fs";
 
   async function saveSettings() {
     const instances = [];
@@ -71,18 +72,13 @@
   }
 
   async function saveSettingsToFile() {
-    const settingsPath = $configPath + path.sep + "settings.json";
-
-    try {
-      await fs.removeFile(settingsPath);
-    } catch (error) {
-      console.error(error);
-    }
-
-    await fs.writeFile({
-      path: settingsPath,
-      contents: JSON.stringify($settings, null, 2),
-    });
+    await fs.writeFile(
+      {
+        path: "settings.json",
+        contents: JSON.stringify($settings, null, 2),
+      },
+      { dir: BaseDirectory.App }
+    );
   }
 
   async function resetSettingsToDefault() {
@@ -96,7 +92,7 @@
   }
 
   async function openSettingsDirectory() {
-    await shell.open($configPath);
+    await shell.open(await path.appDir());
 
     console.log("Opening settings directory!");
   }
